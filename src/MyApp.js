@@ -7,18 +7,31 @@ import axios from 'axios';
 function MyApp() {
   const [characters, setCharacters] = useState([]);
  
-  function removeOneCharacter (index) {
+  async function removeOneCharacter (index) {    
+    var user_id = characters[index].id;
+    await axios.delete('http://localhost:5001/users/'+user_id); //${user_id}'
+    
+    setCharacters([...characters]);
+
+    //console.log(characters);
+    
+  
+    /*
     const updated = characters.filter((character, i) => {
-        return i !== index
-      });
-      setCharacters(updated);
+      return i !== index
+    });
+    setCharacters(updated);
+    */
+    
   }
 
   function updateList(person) { 
     makePostCall(person).then( result => {
     if (result && result.status === 201){
       person = result.data; // updates new person w their ID and stuff
-      setCharacters([...characters, person] );
+      //console.log(person);
+      setCharacters([...characters, person]);
+      //console.log([...characters, person]);
     }});
   }
 
@@ -32,21 +45,20 @@ function MyApp() {
       console.log(error); 
       return false;         
     }
- }
+  }
 
- async function makePostCall(person){
-  try {
-    person['id'] = "";
-    const response = await axios.post('http://localhost:5001/users', person);
-    console.log(person['id']);
-    setCharacters([...characters, person] );//
-    return response;
+  async function makePostCall(person){
+    try {
+      person['id'] = "";
+      const response = await axios.post('http://localhost:5001/users', person);
+      //console.log(person['id']);
+      return response;
+    }
+    catch (error) {
+      console.log(error);
+      return false;
+    }
   }
-  catch (error) {
-    console.log(error);
-    return false;
-  }
-}
 
   useEffect(() => {
     fetchAll().then( result => {
