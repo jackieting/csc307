@@ -9,20 +9,16 @@ function MyApp() {
  
   async function removeOneCharacter (index) {    
     var user_id = characters[index].id;
-    await axios.delete('http://localhost:5001/users/'+user_id); //${user_id}'
-    
-    setCharacters([...characters]);
-
-    //console.log(characters);
-    
-  
-    /*
-    const updated = characters.filter((character, i) => {
-      return i !== index
-    });
-    setCharacters(updated);
-    */
-    
+    const response = await axios.delete('http://localhost:5001/users/'+user_id); //${user_id}'
+    console.log(response.data);
+    if (response.status === 204){
+      const updated = characters.filter((character, i) => {
+        return i !== index
+      });
+      setCharacters(updated);
+      // setCharacters([...characters]); // should show table w the character removed
+      // console.log([...characters]);
+    }
   }
 
   function updateList(person) { 
