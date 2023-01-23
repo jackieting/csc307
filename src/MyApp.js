@@ -16,28 +16,30 @@ function MyApp() {
 
   function updateList(person) { 
     makePostCall(person).then( result => {
-    if (result && result.status === 201)
-       setCharacters([...characters, person] );
-    });
- }
+    if (result && result.status === 201){
+      person = result.data; // updates new person w their ID and stuff
+      setCharacters([...characters, person] );
+    }});
+  }
 
   async function fetchAll(){
     try {
-       const response = await axios.get('http://localhost:5001/users');
-       return response.data.users_list;     
+      const response = await axios.get('http://localhost:5001/users');
+      return response.data.users_list;     
     }
     catch (error){
-       //We're not handling errors. Just logging into the console.
-       console.log(error); 
-       return false;         
+      //We're not handling errors. Just logging into the console.
+      console.log(error); 
+      return false;         
     }
  }
 
  async function makePostCall(person){
   try {
     person['id'] = "";
-    //console.log(person);
     const response = await axios.post('http://localhost:5001/users', person);
+    console.log(person['id']);
+    setCharacters([...characters, person] );//
     return response;
   }
   catch (error) {
